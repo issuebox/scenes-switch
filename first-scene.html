@@ -31,6 +31,10 @@
     <canvas id="renderCanvas" touch-action="none"></canvas>
 
     <script>
+      if (window.WebXRPolyfill) {
+        new WebXRPolyfill();
+        return resolve();
+      }
       async function init() {
         var canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(canvas, true);
