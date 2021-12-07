@@ -33,6 +33,11 @@
 
     <script>
       new window.VConsole();
+      window.onerror = function (message, source, lineno, colno, error) {
+        console.log("window global error: ");
+        console.log(message);
+      };
+
       async function init() {
         var canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(canvas, true);
