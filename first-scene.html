@@ -20,7 +20,7 @@
         touch-action: none;
       }
     </style>
-
+    <script src="https://cdn.jsdelivr.net/npm/webxr-polyfill@latest/build/webxr-polyfill.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/babylonjs@5.0.0-alpha.50/babylon.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/babylonjs-loaders@5.0.0-alpha.50/babylonjs.loaders.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/babylonjs-gui@5.0.0-alpha.50/babylon.gui.min.js"></script>
@@ -63,26 +63,26 @@
 
         sphere.position.y = 1;
 
-         var plane = BABYLON.MeshBuilder.CreatePlane("plane", {
-           width: 2,
-           height: 1,
-         });
-         plane.parent = camera;
-         plane.position.z = 5;
+        var plane = BABYLON.MeshBuilder.CreatePlane("plane", {
+          width: 2,
+          height: 1,
+        });
+        plane.parent = camera;
+        plane.position.z = 5;
 
-         var advancedTexture =
-           BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(plane);
+        var advancedTexture =
+          BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(plane);
 
-         var button1 = BABYLON.GUI.Button.CreateSimpleButton("but1", "Click Me");
-         button1.width = 2;
-         button1.height = 1;
-         button1.color = "white";
-         button1.fontSize = 200;
-         button1.background = "green";
-         button1.onPointerUpObservable.add(function () {
-           location.href = "./second-scene.html";
-         });
-         advancedTexture.addControl(button1);
+        var button1 = BABYLON.GUI.Button.CreateSimpleButton("but1", "Click Me");
+        button1.width = 2;
+        button1.height = 1;
+        button1.color = "white";
+        button1.fontSize = 200;
+        button1.background = "green";
+        button1.onPointerUpObservable.add(function () {
+          location.href = "./second-scene.html";
+        });
+        advancedTexture.addControl(button1);
 
         var xrHelper = await scene.createDefaultXRExperienceAsync();
 
