@@ -56,13 +56,12 @@
         // );
         // light.intensity = 0.7;
 
-        scene.createDefaultCameraOrLight(true, true, true);
-
         var box = BABYLON.MeshBuilder.CreateBox(
           "towerBox",
           { width: 2, height: 2, depth: 2 },
           scene,
         );
+        scene.createDefaultCameraOrLight(true, true, true);
 
         var xrHelper = await scene.createDefaultXRExperienceAsync();
 
