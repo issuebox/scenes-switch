@@ -33,11 +33,19 @@
 
     <script>
       new window.VConsole();
-      window.onerror = function (message, source, lineno, colno, error) {
-        console.log("window global error: ");
-        console.log(message);
-        console.log("---------");
-      };
+      window.addEventListener(
+        "error",
+        function (message, source, lineno, colno, error) {
+          console.log("window global error: ");
+          console.log(message);
+          console.log("---------");
+        },
+      );
+      // window.onerror = function (message, source, lineno, colno, error) {
+      //   console.log("window global error: ");
+      //   console.log(message);
+      //   console.log("---------");
+      // };
 
       async function init() {
         var canvas = document.getElementById("renderCanvas");
