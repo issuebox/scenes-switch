@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>xr problem test</title>
+    <title>Babylon Template</title>
 
     <style>
       html,
@@ -21,7 +21,6 @@
       }
     </style>
 
-    <script src="https://cdn.jsdelivr.net/npm/vconsole@3.9.5/dist/vconsole.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/babylonjs@5.0.0-alpha.63/babylon.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/babylonjs-loaders@5.0.0-alpha.63/babylonjs.loaders.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/babylonjs-gui@5.0.0-alpha.63/babylon.gui.min.js"></script>
@@ -30,60 +29,90 @@
 
   <body>
     <canvas id="renderCanvas" touch-action="none"></canvas>
+    <!-- touch-action="none" for best results from PEP -->
 
     <script>
-      new window.VConsole();
-      console.log("===============");
-      window.addEventListener(
-        "error",
-        function (message, source, lineno, colno, error) {
-          console.log("window global error: ");
-          console.log(message);
-          console.log("---------");
-        },
-      );
-      // window.onerror = function (message, source, lineno, colno, error) {
-      //   console.log("window global error: ");
-      //   console.log(message);
-      //   console.log("---------");
-      // };
-
+      alert(333);
       async function init() {
-        var canvas = document.getElementById("renderCanvas");
-        var engine = new BABYLON.Engine(canvas, true);
+        let current = 0;
+        const canvas = document.getElementById("renderCanvas");
+        const engine = new BABYLON.Engine(canvas, true);
 
-        var scene = new BABYLON.Scene(engine);
+        var createScene = async function () {
+          // This creates a basic Babylon Scene object (non-mesh)
+          var scene = new BABYLON.Scene(engine);
 
-        // var camera = new BABYLON.FreeCamera(
-        //   "camera1",
-        //   new BABYLON.Vector3(0, 5, -10),
-        //   scene,
-        // );
+          // This creates and positions a free camera (non-mesh)
+          var camera = new BABYLON.FreeCamera(
+            "camera1",
+            new BABYLON.Vector3(0, 5, -10),
+            scene,
+          );
 
-        // camera.setTarget(BABYLON.Vector3.Zero());
+          // This targets the camera to scene origin
+          camera.setTarget(BABYLON.Vector3.Zero());
 
-        // camera.attachControl(canvas, true);
+          // This attaches the camera to the canvas
+          camera.attachControl(canvas, true);
 
-        // var light = new BABYLON.HemisphericLight(
-        //   "light",
-        //   new BABYLON.Vector3(0, 1, 0),
-        //   scene,
-        // );
-        // light.intensity = 0.7;
+          // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+          var light = new BABYLON.HemisphericLight(
+            "light",
+            new BABYLON.Vector3(0, 1, 0),
+            scene,
+          );
 
-        var box = BABYLON.MeshBuilder.CreateBox(
-          "towerBox",
-          { width: 2, height: 2, depth: 2 },
-          scene,
-        );
-        scene.createDefaultCameraOrLight(true, true, true);
+          // Default intensity is 1. Let's dim the light a small amount
+          light.intensity = 0.7;
 
-        var xrHelper = await scene.createDefaultXRExperienceAsync();
+          // Our built-in 'sphere' shape.
+          var sphere = BABYLON.MeshBuilder.CreateSphere(
+            "sphere",
+            { diameter: 2, segments: 32 },
+            scene,
+          );
+
+          // Move the sphere upward 1/2 its height
+          sphere.position.y = 1;
+
+          const plane = BABYLON.MeshBuilder.CreatePlane("plane", {
+            width: 2,
+            height: 1,
+          });
+          plane.parent = camera;
+          plane.position.z = 5;
+
+          const advancedTexture =
+            BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(plane);
+
+          const button1 = BABYLON.GUI.Button.CreateSimpleButton(
+            "but1",
+            "Click Me",
+          );
+          button1.width = 2;
+          button1.height = 1;
+          button1.color = "white";
+          button1.fontSize = 200;
+          button1.background = "green";
+          button1.onPointerUpObservable.add(function () {
+            window.location = "./index2.html";
+          });
+          advancedTexture.addControl(button1);
+
+          // XR
+          const xrHelper = await scene.createDefaultXRExperienceAsync();
+          // scene.createDefaultVRExperience();
+
+          return scene;
+        };
+
+        const scene = await createScene();
 
         engine.runRenderLoop(function () {
           scene.render();
         });
 
+        // Watch for browser/canvas resize events
         window.addEventListener("resize", function () {
           engine.resize();
         });
